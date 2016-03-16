@@ -11,6 +11,10 @@ object Akinator{
   case class Animal(nom:String) extends ABanimal
   case class Question(q:String,oui:ABanimal,non:ABanimal) extends ABanimal
 
+  /*
+
+  Ancienne version
+
   def fichierToABanimal(nomf:String): ABanimal = {
     val line = Source.fromFile(nomf).getLines()
 
@@ -24,6 +28,27 @@ object Akinator{
     }
 
     Question(line.next().substring(2),aux(),aux())
+  }
+  */
+
+  def fichierToABanimal(nomf:String): ABanimal = {
+    val line = Source.fromFile(nomf).getLines().toList
+
+    def aux(l:List[String]): (Integer,ABanimal) = l match {
+      case t::q =>
+      {
+        if (t.contains("q:")) {
+          val (i, a) = aux(q)
+          val (i2,b) = aux(q.drop(i))
+          (1+i+i2,Question(t.substring(2),a,b))
+        }else
+          (1,Animal(t))
+      }
+      case List(x) => (1,Animal(x))
+    }
+
+    val (i,a) = aux(line)
+    a
   }
 
   def ABanimalToFichier(nomf:String,a:ABanimal) : Unit = {
@@ -168,10 +193,18 @@ object Akinator{
   def main(args:Array[String]) {
     /* Test unitaire */
     //ABanimalToFichier("jeuapprentissage.txt", fichierToABanimal("base.txt"))
-    println(fichierToABanimal("jeuapprentissage.txt"))
+    //println(fichierToABanimal("jeuapprentissage.txt"))
     //val ret = jeuLog(fichierToABanimal("base.txt"), Source.stdin.getLines())
     //println(ret)
-    ABanimalToFichier("jeuapprentissage.txt",jeuApprentissage(fichierToABanimal("jeuapprentissage.txt"),Source.stdin.getLines()))
+    def jouer(fname:String): Unit = {
+      ABanimalToFichier(fname,jeuApprentissage(fichierToABanimal(fname),Source.stdin.getLines()))
+      println("Voulez vous rejouer ? (o/n)")
+      val restart = Source.stdin.getLines().next()
+      if(restart.equals("o"))
+        jouer(fname)
+    }
+
+    jouer("jeuapprentissage.txt")
     //jeuApprentissage(fichierToABanimal("jeuapprentissage.txt"),Source.stdin.getLines())
   }
 }

@@ -8,4 +8,14 @@ Chauve-Souris
 Ptérodactyle
 q:Est-ce qu'il a une moustache ?
 Chat
+q:Est ce qu'il a des nageoires ?
+q:Possède-t-il des griffes empoisonnées ?
+Ornithorinque
+Dauphin
+q:est ce que c'est un ruminant ?
+cheval
+q:Est-ce qu'il crache sur les gens ?
+Lama
+q:Vit-il dans la glouglou ?
+Etoile de mer
 Chien
